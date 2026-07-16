@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI盯盘模拟盘</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body class="dashboard">
+  <main class="shell">
+    <section class="commandbar">
+      <div class="status-line">
+        <span id="liveDot" class="dot"></span>
+        <strong id="watchState">待命</strong>
+        <em id="runtimeMeta">--</em>
+      </div>
+      <div class="controls">
+        <button id="startBtn" class="primary">开始盯盘</button>
+        <button id="decideBtn" class="secondary">立即决策</button>
+        <button id="candidateToggleBtn" class="ghost" type="button" aria-expanded="false">候选池</button>
+        <button id="askToggleBtn" class="ghost" type="button" aria-expanded="false">AI问股</button>
+        <button id="bloggerToggleBtn" class="ghost" type="button" aria-expanded="false">动态</button>
+        <button id="stopBtn" class="ghost">暂停</button>
+      </div>
+    </section>
+
+    <section id="dashboardPage" class="page-view">
+    <section class="cards">
+      <div class="metric"><span>总资产</span><strong id="totalValue">--</strong></div>
+      <div class="metric"><span>现金</span><strong id="cash">--</strong></div>
+      <div class="metric"><span>持仓市值</span><strong id="marketValue">--</strong></div>
+      <div class="metric"><span>累计盈亏</span><strong id="pnl">--</strong></div>
+    </section>
+
+    <nav class="market-tabs" aria-label="模拟盘视图">
+      <button class="is-active" type="button" data-main-tab="positions">持仓股</button>
+      <button type="button" data-main-tab="returns">收益</button>
+    </nav>
+
+    <section id="positionsTabPanel" class="tab-panel">
+    <section id="mainLayout" class="layout candidates-collapsed">
+      <section id="candidatePanel" class="panel candidates" hidden>
+        <div class="panel-head">
+          <div>
+            <h2>规则候选池</h2>
+            <p>严格N字、观察池和AI可买池。</p>
+          </div>
+          <div class="panel-meta">
+            <span id="marketProgress">--</span>
+            <span id="quoteTime">--</span>
+          </div>
+        </div>
+        <div id="candidates"></div>
+        <div id="strategyDiagnostics" class="strategy-diagnostics"></div>
+      </section>
+      <section class="panel positions">
+        <div class="panel-head">
+          <div>
+            <h2>持仓</h2>
+            <p>实时浮盈浮亏与成本基准。</p>
+          </div>
+          <span id="posCount">0只</span>
+        </div>
+        <div id="positions"></div>
+      </section>
+    </section>
+    </section>
+
+    <section id="returnsTabPanel" class="tab-panel" hidden>
+      <section class="panel returns-panel">
+        <div class="panel-head">
+          <div>
+            <h2>收益分析</h2>
+          </div>
+          <span id="returnsMeta">--</span>
+        </div>
+        <div id="dailyReturns" class="daily-returns"></div>
+      </section>
+    </section>
+
+    <section class="layout lower">
+      <section class="panel orders" hidden>
+        <div class="panel-head">
+          <div>
+            <h2>模拟订单</h2>
+            <p>成交都来自后端规则或 AI 决策，不接真实下单。</p>
+          </div>
+          <span id="orderCount">0条</span>
+        </div>
+        <div id="orders"></div>
+      </section>
+      <section class="panel decisions">
+        <div class="panel-head">
+          <div>
+            <h2>AI 决策日志</h2>
+            <p>每轮决策的摘要与动作结果。</p>
+          </div>
+          <span id="aiSource">--</span>
+        </div>
+        <div id="decisions"></div>
+      </section>
+    </section>
+
+    <section class="layout review">
+      <section class="panel review-panel">
+        <div class="panel-head">
+          <div>
+            <h2>昨日复盘</h2>
+            <p>自动总结昨日的赚钱、亏钱与次日规则。</p>
+          </div>
+          <span id="reviewMeta">--</span>
+        </div>
+        <div id="reviews"></div>
+      </section>
+    </section>
+
+    <section id="askSection" class="layout ask is-collapsed" hidden>
+      <section id="askPanel" class="panel ask-panel">
+        <div class="panel-head">
+          <div>
+            <h2>AI 问股</h2>
+            <p>问持仓、候选池或单只股票，只分析不下单。</p>
+          </div>
+        </div>
+        <div id="askContent" class="ask-content" hidden>
+          <div class="ask-box">
+            <textarea id="askInput" rows="3" placeholder="例如：看看 603629 为什么不买？现在算不算追高？"></textarea>
+            <button id="askBtn" class="secondary" type="button">问一下</button>
+          </div>
+          <div id="askHistory"></div>
+        </div>
+      </section>
+    </section>
+
+    <section class="layout tertiary" hidden>
+      <section class="panel activity-panel">
+        <div class="panel-head">
+          <div>
+            <h2>最近日志</h2>
+            <p>运行、决策、错误与状态变化。</p>
+          </div>
+          <span>Live feed</span>
+        </div>
+        <div id="logs"></div>
+      </section>
+    </section>
+    </section>
+  </main>
+  <aside id="bloggerDrawer" class="blogger-drawer" hidden>
+    <div class="blogger-drawer-head">
+      <div>
+        <strong>博主动态</strong>
+        <span id="bloggerDrawerMeta">后台监控中</span>
+      </div>
+      <button id="bloggerCloseBtn" type="button" aria-label="关闭动态">×</button>
+    </div>
+    <div id="bloggerDrawerList" class="blogger-drawer-list"></div>
+  </aside>
+  <script src="/static/app.js"></script>
+</body>
+</html>
